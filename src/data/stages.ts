@@ -96,7 +96,7 @@ export const DLP_STAGES: readonly Stage[] = [
   { id: 'fix', icon: ICON_LOCK, label: 'Разбор' },
 ] as const
 
-/** Брутфорс: атакующий → VPN → локраунты и MFA → SIEM/SOC. */
+/** Брутфорс: атакующий → VPN → локауты и MFA → SIEM/SOC. */
 export const BRUTE_STAGES: readonly Stage[] = [
   { id: 'bot', icon: ICON_GLOBE, label: 'Атакующий', evil: true },
   { id: 'entry', icon: ICON_KEY, label: 'VPN-шлюз' },

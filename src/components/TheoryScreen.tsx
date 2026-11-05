@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import { PixelSprite } from '../pixel/PixelSprite'
-import { CAP, CAP_PALETTE, ICON_PALETTE } from '../pixel/maps'
+import { ICON_PALETTE } from '../pixel/maps'
 import { SpeakingMascot } from './SpeakingMascot'
 import { THEORY } from '../data/theory'
 
@@ -9,7 +9,7 @@ interface TheoryScreenProps {
 }
 
 /** Теоретический модуль: короткие объяснения всех СЗИ и подразделений.
- *  Мяушифр в академическом колпаке напутствует репликой, кнопка
+ *  Мяушифр (слева, как на пикере) напутствует репликой, кнопка
  *  «К сценариям» — только в самом конце: страницу читают целиком. */
 export const TheoryScreen = forwardRef<HTMLDivElement, TheoryScreenProps>(function TheoryScreen(
   { onStart },
@@ -18,6 +18,12 @@ export const TheoryScreen = forwardRef<HTMLDivElement, TheoryScreenProps>(functi
   return (
     <div className="theory" ref={ref} tabIndex={-1}>
       <header className="theory__head">
+        <SpeakingMascot
+          mood="idle"
+          size={148}
+          className="theory__speaker"
+          quote="Мяу! Прочитай азбуку до конца: каждое слово потом встретится тебе в сценариях!"
+        />
         <div className="theory__headtext">
           <p className="theory__eyebrow px-text">Теория перед демонстрациями</p>
           <h1 className="theory__title px-text">Азбука защиты</h1>
@@ -27,13 +33,6 @@ export const TheoryScreen = forwardRef<HTMLDivElement, TheoryScreenProps>(functi
             словах. Дальше каждое покажет себя в деле!
           </p>
         </div>
-        <SpeakingMascot
-          mood="idle"
-          size={148}
-          className="theory__speaker"
-          quote="Мяу! В моём академическом колпаке — вся мудрость защиты: прочитай азбуку до конца, и каждое слово встретится тебе в сценариях!"
-          overlay={<PixelSprite map={CAP} palette={CAP_PALETTE} className="speaker-overlay--cap" />}
-        />
       </header>
 
       {THEORY.map((group) => (

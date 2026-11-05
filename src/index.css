@@ -722,12 +722,12 @@ button {
   outline: none;
 }
 
+/* шапка теории — как пикер: маскот слева, текст справа */
 .theory__head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 32px 28px;
+  gap: 28px;
+  padding: 30px 26px;
   margin-bottom: 24px;
   border: 2px solid var(--line);
   border-radius: var(--radius);
@@ -740,18 +740,14 @@ button {
   min-width: 0;
 }
 
-/* Мяушифр-академик: доска колпака лежит ПОВЕРХ макушки PNG */
+/* у .speaker width:100% — гасим, чтобы кот не выталкивал текст */
 .theory__speaker {
   flex: none;
+  width: auto;
 }
 
 .theory__speaker .speaker__bubble {
-  max-width: 340px;
-}
-
-.theory__speaker .speaker__cat {
-  /* запас под торчащий вверх колпак */
-  margin-top: 16px;
+  max-width: 300px;
 }
 
 /* кот и его декор: декор абсолютом поверх PNG, а не за ним */
@@ -765,17 +761,6 @@ button {
   inset: 0;
   pointer-events: none;
   z-index: 2;
-}
-
-/* посадка колпака на макушку: доска-ромб сверху, тёмное основание
-   (нижние строки карты) надевается на голову между ушей (X≈33–65%) */
-.speaker-overlay--cap {
-  position: absolute;
-  top: -14%;
-  left: 49%;
-  width: 72%;
-  transform: translateX(-50%);
-  filter: drop-shadow(0 3px 0 rgba(9, 11, 23, 0.55));
 }
 
 /* подарок в лапе — перекрывает щит (щит: X 68–95%, Y 48–88%) */

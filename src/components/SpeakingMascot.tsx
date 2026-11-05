@@ -8,7 +8,7 @@ interface SpeakingMascotProps {
   mood?: Mood
   quote: string
   size?: number
-  /** Декор поверх кота (колпак, подарок): абсолют поверх PNG. */
+  /** Декор поверх кота (подарок): абсолют поверх PNG. */
   overlay?: ReactNode
   /** Класс-модификатор для точечной стилизации на конкретном экране. */
   className?: string

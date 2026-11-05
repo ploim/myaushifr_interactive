@@ -46,9 +46,9 @@ node scripts/preview.mjs   # ASCII-превью пиксель-карт + вал
   Рот синхронизирован с печатью реплики: `useTypewriter` → prop `talking` →
   CSS `mouth-flap`; при reduced-motion текст появляется целиком. Говорящий
   маскот вне сценариев (приветствие, теория, приз) — `SpeakingMascot`;
-  декор поверх кота — проп `overlay` (колпак «Азбуки» — карта `CAP`,
-  подарок в лапе на призе — карта `GIFT`; рисуется в `.speaker__overlay`
-  с z-index 2 поверх PNG, посадка — классы `.speaker-overlay--cap/--gift`).
+  декор поверх кота — проп `overlay` (подарок в лапе на призе — карта
+  `GIFT`; рисуется в `.speaker__overlay` с z-index 2 поверх PNG,
+  посадка — класс `.speaker-overlay--gift`).
 - `src/pixel/maps.ts` — пиксельные карты (значки, иконки узлов, маркеры).
   После ЛЮБОЙ правки запускать `scripts/preview.mjs`: строки карты обязаны
   быть одной длины, превью показывает, как sprite ляжет на экран.

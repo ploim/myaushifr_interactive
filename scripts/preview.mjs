@@ -519,18 +519,6 @@ const CARD = [
   '............',
 ]
 
-const CAP = [
-  '........gg........',
-  '......wwbbww......',
-  '....wwbbbbbbww....',
-  '..wwbbbbbbbbbbww..',
-  '....bbbbbbbbbb.d..',
-  '.....dddddddd..d..',
-  '.....dddddddd..d..',
-  '.....dddddddd.ggg.',
-  '.....dddddddd.....',
-]
-
 const GIFT = [
   '..gg....gg..',
   '...gggggg...',
@@ -556,5 +544,4 @@ show('KEYMARKER', KEYMARKER)
 show('KEYMARKER locked', applyPatch(KEYMARKER, MARKER_LOCK))
 show('CARD', CARD)
 show('CARD locked', applyPatch(CARD, MARKER_LOCK))
-show('CAP (академический колпак)', CAP)
 show('GIFT (сладкий подарок)', GIFT)

@@ -21,7 +21,7 @@ export const TheoryScreen = forwardRef<HTMLDivElement, TheoryScreenProps>(functi
           Все решения и подразделения, которые встретятся в сценариях, — в двух-трёх
           предложениях каждое. Дальше каждое покажет себя в деле.
         </p>
-        <button type="button" className="btn btn--primary theory__start" onClick={onStart}>
+        <button type="button" className="btn btn--primary btn--pixel theory__start" onClick={onStart}>
           К сценариям →
         </button>
       </header>

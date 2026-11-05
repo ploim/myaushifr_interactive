@@ -256,6 +256,64 @@ button {
   color: #2b0d13;
 }
 
+/* мигание главного CTA: палитра переливается дискретно, как color-cycling
+   в 16-битных играх — резкие steps, без плавных переходов; поверх бежит
+   клетчатая полоса-блик. При reduced-motion застывает базовым cyan */
+.btn--pixel {
+  position: relative;
+  overflow: hidden;
+  animation: pixel-cycle 1.35s steps(1) infinite;
+}
+
+@keyframes pixel-cycle {
+  0% {
+    background: var(--cyan);
+    color: #06282a;
+  }
+
+  33% {
+    background: var(--violet);
+    color: #10132b;
+  }
+
+  66% {
+    background: var(--gold);
+    color: #3a2b06;
+  }
+
+  100% {
+    background: var(--cyan);
+    color: #06282a;
+  }
+}
+
+/* полоса из клеток 12px прыгает по кнопке, как спрайт по тайлам */
+.btn--pixel::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: -30%;
+  width: 26%;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255 255 255 / 0.38) 0 12px,
+    rgba(255 255 255 / 0.14) 12px 24px,
+    transparent 24px 36px
+  );
+  animation: pixel-run 1.35s steps(14) infinite;
+}
+
+@keyframes pixel-run {
+  from {
+    left: -30%;
+  }
+
+  to {
+    left: 110%;
+  }
+}
+
 /* ------------------------------------------------------------------ каркас */
 
 .app {

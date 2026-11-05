@@ -14,12 +14,11 @@ const STATUS_CLASS: Record<string, string> = {
 
 interface ScenePanelProps {
   step: Step
-  actQuote: string
 }
 
 /** Сюжетная панель: заголовок акта/сцены, карточка участника и результат проверки. */
 export const ScenePanel = forwardRef<HTMLDivElement, ScenePanelProps>(function ScenePanel(
-  { step, actQuote },
+  { step },
   ref,
 ) {
   const { act, actIndex, actFirstScene, scene } = step
@@ -28,7 +27,11 @@ export const ScenePanel = forwardRef<HTMLDivElement, ScenePanelProps>(function S
       <p className="scenepanel__act px-text">
         Акт {actIndex + 1} · {act.title}
       </p>
-      {actFirstScene && <p className="scenepanel__actquote">«{actQuote}»</p>}
+      {actFirstScene && (
+        <p className="scenepanel__actquote">
+          «{act.quote}» <span className="scenepanel__actquote-id">реплика {act.id}</span>
+        </p>
+      )}
 
       <h2 className="scenepanel__title">{scene.title}</h2>
 

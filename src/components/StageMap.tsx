@@ -1,10 +1,8 @@
 import type { CSSProperties } from 'react'
 import { PixelSprite } from '../pixel/PixelSprite'
-import { ICON_PALETTE, LETTER, LETTER_LOCKED, LETTER_PALETTE, applyPatch } from '../pixel/maps'
-import { STAGES, STAGE_ORDER, type StageId } from '../data/stages'
+import { ICON_PALETTE, MARKER_LOCK, MARKER_PALETTE, applyPatch } from '../pixel/maps'
+import type { NodeState } from '../data/stages'
 import type { Step } from '../data/scenarios'
-
-export type NodeState = 'future' | 'current' | 'passed' | 'blocked' | 'quarantine' | 'delivered'
 
 const STATE_TEXT: Record<NodeState, string> = {
   future: 'ожидание',
@@ -13,32 +11,38 @@ const STATE_TEXT: Record<NodeState, string> = {
   blocked: 'заблокировано',
   quarantine: 'карантин',
   delivered: 'доставлено',
+  defended: 'защищено',
+}
+
+const STATE_MARK: Record<NodeState, string> = {
+  future: '·',
+  current: '●',
+  passed: '✓',
+  delivered: '✓',
+  defended: '✓',
+  blocked: '✕',
+  quarantine: '✕',
 }
 
 /**
- * Состояния узлов выводим из истории шагов: узлы до текущего — пройдены,
- * узел поимки навсегда «заблокирован», финал — карантин или доставка.
+ * Состояния узлов выводим из истории шагов: каждый узел помнит собственный
+ * итог (поимка остаётся «заблокированной»), финал — состояние сценария.
  */
-function nodeStates(steps: readonly Step[], index: number): Record<StageId, NodeState> {
-  const states = Object.fromEntries(
-    STAGES.map((s) => [s.id, 'future' as NodeState]),
-  ) as Record<StageId, NodeState>
-  let caughtAt: StageId | null = null
+function nodeStates(steps: readonly Step[], index: number): Record<string, NodeState> {
+  const { scenario } = steps[index]
+  const stages = scenario.stages
+  const lastStageId = stages[stages.length - 1].id
+  const states = Object.fromEntries(stages.map((s) => [s.id, 'future' as NodeState]))
   for (let i = 0; i <= index; i++) {
     const { scene } = steps[i]
     const stage = scene.stage
-    if (stage === 'endpoint') {
-      states.endpoint = steps[i].scenario.outcome === 'blocked' ? 'quarantine' : 'delivered'
+    if (stage === lastStageId) {
+      states[lastStageId] = scenario.finalNodeState
       continue
     }
-    if (i === index) {
-      states[stage] = scene.status === 'block' ? 'blocked' : 'current'
-    } else {
-      states[stage] = 'passed'
-    }
-    if (scene.status === 'block' && caughtAt === null) caughtAt = stage
+    const next: NodeState = scene.status === 'block' ? 'blocked' : i === index ? 'current' : 'passed'
+    if (states[stage] !== 'blocked') states[stage] = next
   }
-  if (caughtAt) states[caughtAt] = 'blocked'
   return states
 }
 
@@ -49,11 +53,13 @@ interface StageMapProps {
 
 export function StageMap({ steps, step }: StageMapProps) {
   const { scenario, scene, index } = step
+  const stages = scenario.stages
   const states = nodeStates(steps, index)
-  const locked = steps.slice(0, index + 1).some((s) => s.scene.letterLocked)
+  const locked = steps.slice(0, index + 1).some((s) => s.scene.markerLocked)
+  const markerCol = stages.findIndex((s) => s.id === scene.stage)
 
   return (
-    <section className="stagemap" aria-label="Схема инфраструктуры: путь письма">
+    <section className="stagemap" aria-label="Схема инфраструктуры">
       <div className="stagemap__head">
         <span className="px-chip px-chip--scenario">{scenario.title}</span>
         <span className="px-chip">
@@ -61,46 +67,38 @@ export function StageMap({ steps, step }: StageMapProps) {
         </span>
       </div>
 
-      <div className="rail" style={{ '--nodes': STAGES.length } as CSSProperties}>
+      <div className="rail" style={{ '--nodes': stages.length } as CSSProperties}>
         <ol className="rail__nodes">
-          {STAGES.map((stage) => {
+          {stages.map((stage) => {
             const state = states[stage.id]
-            const label = scenario.stageLabels[stage.id] ?? stage.label
-            const evil = scenario.id === 'malicious' && stage.id === 'sender'
             return (
-              <li key={stage.id} className="node" data-state={state} data-evil={evil || undefined}>
+              <li key={stage.id} className="node" data-state={state} data-evil={stage.evil || undefined}>
                 <span className="node__icon">
                   <PixelSprite map={stage.icon} palette={ICON_PALETTE} className="node__sprite" />
                   <span className="node__mark" aria-hidden="true">
-                    {state === 'passed' || state === 'delivered'
-                      ? '✓'
-                      : state === 'current'
-                        ? '●'
-                        : state === 'blocked' || state === 'quarantine'
-                          ? '✕'
-                          : '·'}
+                    {STATE_MARK[state]}
                   </span>
                 </span>
-                <span className="node__label">{label}</span>
+                <span className="node__label">{stage.label}</span>
                 <span className="node__state" aria-hidden="true">
                   {STATE_TEXT[state]}
                 </span>
-                <span className="visually-hidden">{`${label}: ${STATE_TEXT[state]}`}</span>
+                <span className="visually-hidden">{`${stage.label}: ${STATE_TEXT[state]}`}</span>
               </li>
             )
           })}
         </ol>
 
         <div
-          className="letter"
+          className="marker"
           data-locked={locked || undefined}
-          style={{ '--col': STAGE_ORDER[scene.stage] } as CSSProperties}
+          style={{ '--col': Math.max(markerCol, 0) } as CSSProperties}
           aria-hidden="true"
         >
           <PixelSprite
-            map={locked ? applyPatch(LETTER, LETTER_LOCKED) : LETTER}
-            palette={LETTER_PALETTE}
-            className="letter__sprite"
+            map={locked ? applyPatch(scenario.marker, MARKER_LOCK) : scenario.marker}
+            palette={MARKER_PALETTE}
+            className="marker__sprite"
           />
         </div>
       </div>

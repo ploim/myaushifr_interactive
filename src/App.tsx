@@ -2,20 +2,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Mascot } from './components/Mascot'
 import { Controls } from './components/Controls'
 import { FinalCard } from './components/FinalCard'
-import { QuoteEditor } from './components/QuoteEditor'
 import { ScenarioPicker } from './components/ScenarioPicker'
 import { ScenePanel } from './components/ScenePanel'
 import { StageMap } from './components/StageMap'
 import { flatten, type Scenario } from './data/scenarios'
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion'
-import { useQuotes } from './hooks/useQuotes'
 import { useTypewriter } from './hooks/useTypewriter'
 
 export default function App() {
   const [scenario, setScenario] = useState<Scenario | null>(null)
   const [index, setIndex] = useState(0)
-  const [editorOpen, setEditorOpen] = useState(false)
-  const quotes = useQuotes()
   const reducedMotion = usePrefersReducedMotion()
 
   const steps = useMemo(() => (scenario ? flatten(scenario) : []), [scenario])
@@ -38,14 +34,13 @@ export default function App() {
 
   // Фокус на заголовок при смене шага — скринридер озвучит новую сцену.
   useEffect(() => {
-    if (!step || editorOpen) return
+    if (!step) return
     titleRef.current?.focus()
-  }, [step, editorOpen])
+  }, [step])
 
-  // Клавиатура: ←/→ двигают сценарий, Esc закрывает редактор (внутри QuoteEditor).
+  // Клавиатура: ←/→ двигают сценарий.
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (editorOpen) return
       const target = event.target as HTMLElement | null
       if (target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return
       if (!step) return
@@ -59,20 +54,13 @@ export default function App() {
     }
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
-  }, [editorOpen, step, next, back])
+  }, [step, next, back])
 
-  const openEditor = useCallback(() => {
-    quotes.beginEditing()
-    setEditorOpen(true)
-  }, [quotes])
-
-  const actQuote = step ? quotes.quote(step.act.id) : ''
-  const sceneQuote = step ? quotes.quote(step.scene.id) : ''
-  const quoteDirty = step ? quotes.isDraftDirty(step.scene.id) : false
+  const sceneQuote = step?.scene.quote ?? ''
 
   // Реплика печатается по буквам, кот «говорит» — открывает рот в такт печати.
-  // При открытом редакторе и reduced-motion текст появляется целиком.
-  const typing = useTypewriter(sceneQuote, Boolean(step) && !editorOpen && !reducedMotion)
+  // При reduced-motion текст появляется целиком.
+  const typing = useTypewriter(sceneQuote, Boolean(step) && !reducedMotion)
   const talking = !typing.done
 
   return (
@@ -85,13 +73,10 @@ export default function App() {
         <div className="app__brand">
           <Mascot mood="idle" size={44} className="app__logo" />
           <div>
-            <p className="app__title px-text">Путь письма</p>
-            <p className="app__subtitle">демо защиты от вредоносных вложений</p>
+            <p className="app__title px-text">Стенд СЗИ</p>
+            <p className="app__subtitle">демо работы средств защиты информации</p>
           </div>
         </div>
-        <button type="button" className="btn btn--ghost" onClick={openEditor}>
-          ✎ Реплики кота
-        </button>
       </header>
 
       <main id="main" className="app__main">
@@ -111,30 +96,23 @@ export default function App() {
                 {step.scene.finale ? (
                   <FinalCard step={step} ref={titleRef} />
                 ) : (
-                  <ScenePanel step={step} actQuote={actQuote} ref={titleRef} />
+                  <ScenePanel step={step} ref={titleRef} />
                 )}
               </div>
 
               <aside className="run__mascot" aria-label="Комментарий Мяушифра">
-                <div className={`bubble${quoteDirty ? ' bubble--dirty' : ''}`}>
+                <div className="bubble">
                   <p className="bubble__text" aria-hidden="true">
                     «{typing.shown}»
                     {!typing.done && <span className="bubble__caret" />}
                   </p>
                   {/* полный текст — сразу, посимвольная печать озвучке мешает */}
                   <p className="visually-hidden">«{sceneQuote}»</p>
-                  <button
-                    type="button"
-                    className="bubble__edit"
-                    onClick={openEditor}
-                    aria-label="Редактировать реплику текущей сцены"
-                  >
-                    ✎ править
-                  </button>
+                  {/* id реплики — якорь для правок в src/data/scenarios.ts */}
+                  <p className="bubble__id">реплика {step.scene.id}</p>
                 </div>
                 <Mascot mood={step.scene.mood} talking={talking} size={190} className="run__cat" />
                 <p className="run__catname px-text">Мяушифр</p>
-                {quoteDirty && <p className="run__unsaved">реплика не сохранена</p>}
               </aside>
             </div>
 
@@ -145,14 +123,10 @@ export default function App() {
 
       <footer className="app__footer">
         <p>
-          Учебная демонстрация: события и вердикты концептуальные. Реплики кота можно менять — они
-          сохраняются в этом браузере.
+          Учебная демонстрация: события и вердикты концептуальные. Реплики Мяушифра задаются в
+          исходном коде — их id видны в интерфейсе под репликами.
         </p>
       </footer>
-
-      {editorOpen && (
-        <QuoteEditor quotes={quotes} currentSceneId={step?.scene.id} onClose={() => setEditorOpen(false)} />
-      )}
     </div>
   )
 }

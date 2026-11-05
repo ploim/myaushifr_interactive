@@ -142,8 +142,200 @@ export const ICON_ENVELOPE: PixelMap = [
   '............',
 ]
 
-/** Конверт-спрайт на треке, 12×8. */
-export const LETTER_PALETTE: Record<string, string> = {
+/** Сотрудник: голова и плечи. 12×12. */
+export const ICON_USER: PixelMap = [
+  '............',
+  '....oooo....',
+  '...offffo...',
+  '...ofeffo...',
+  '...offffo...',
+  '....oooo....',
+  '..oooooooo..',
+  '.offffffffo.',
+  '.offkffkffo.',
+  '.offffffffo.',
+  '..oooooooo..',
+  '............',
+]
+
+/** EDR: щит с глазом — наблюдение за конечной точкой. 12×12. */
+export const ICON_EDR: PixelMap = [
+  '.oooooooooo.',
+  '.offffffffo.',
+  '.offwwwwffo.',
+  '.offwffwffo.',
+  '.offwwwwffo.',
+  '.offffffffo.',
+  '..offffffo..',
+  '..offffffo..',
+  '...offffo...',
+  '....offo....',
+  '.....oo.....',
+  '............',
+]
+
+/** Сервер: стойка с прорезями и индикаторами. 12×12. */
+export const ICON_SERVER: PixelMap = [
+  '..oooooooo..',
+  '.owwwwwwwwo.',
+  '.owfwwwwfwo.',
+  '.oewwwwwweo.',
+  '..oooooooo..',
+  '..oooooooo..',
+  '.owwwwwwwwo.',
+  '.owfwwwwfwo.',
+  '.owwwwwwwwo.',
+  '.oewwwwwweo.',
+  '..oooooooo..',
+  '............',
+]
+
+/** Радар-прицел: круг с перекрестием. 12×12. */
+export const ICON_RADAR: PixelMap = [
+  '............',
+  '....oooo....',
+  '..oo....oo..',
+  '.o........o.',
+  '.o...ee...o.',
+  'oo...ee...oo',
+  'oo........oo',
+  '.o........o.',
+  '..oo....oo..',
+  '....oooo....',
+  '.....oo.....',
+  '............',
+]
+
+/** Межсетевой экран: кирпичная кладка. 12×12. */
+export const ICON_WALL: PixelMap = [
+  'oooooooooooo',
+  'offfofffofff',
+  'offfofffofff',
+  'oooooooooooo',
+  'ffofffofffof',
+  'ffofffofffof',
+  'oooooooooooo',
+  'offfofffofff',
+  'offfofffofff',
+  'oooooooooooo',
+  'ffofffofffof',
+  'ffofffofffof',
+]
+
+/** Чип: процессор с ногами — рабочая станция / сегмент сети. 12×12. */
+export const ICON_CHIP: PixelMap = [
+  '............',
+  '...o....o...',
+  '..oooooooo..',
+  '.ooffffffoo.',
+  '.oofeffefoo.',
+  '.oofeffefoo.',
+  '.ooffffffoo.',
+  '.ooffffffoo.',
+  '..oooooooo..',
+  '...o....o...',
+  '...o....o...',
+  '............',
+]
+
+/** Глаз: наблюдение SOC. 12×12. */
+export const ICON_EYE: PixelMap = [
+  '............',
+  '............',
+  '............',
+  '...oooooo...',
+  '..offffffo..',
+  '.offfeefffo.',
+  '.offfeefffo.',
+  '..offffffo..',
+  '...oooooo...',
+  '............',
+  '............',
+  '............',
+]
+
+/** Воронка: DLP просеивает потоки данных. 12×12. */
+export const ICON_FUNNEL: PixelMap = [
+  '............',
+  '.oooooooooo.',
+  '.offeeffffo.',
+  '..offeeffo..',
+  '...offffo...',
+  '....offo....',
+  '.....oo.....',
+  '.....oo.....',
+  '.....oo.....',
+  '............',
+  '............',
+  '............',
+]
+
+/** Ключ: точка входа с аутентификацией. 12×12. */
+export const ICON_KEY: PixelMap = [
+  '............',
+  '............',
+  '............',
+  '..oooo......',
+  '.offffo.....',
+  '.offffoooooo',
+  '.offffo.o.o.',
+  '..oooo..o.o.',
+  '............',
+  '............',
+  '............',
+  '............',
+]
+
+/** График: рост и всплески — анализ аномалий. 12×12. */
+export const ICON_CHART: PixelMap = [
+  '............',
+  '........ee..',
+  '........ff..',
+  '........ff..',
+  '.....ee.ff..',
+  '.....ff.ff..',
+  '.....ff.ff..',
+  '..ee.ff.ff..',
+  '..ff.ff.ff..',
+  '..ff.ff.ff..',
+  '............',
+  '............',
+]
+
+/** Замок: блокировка / ликвидация. 12×12. */
+export const ICON_LOCK: PixelMap = [
+  '............',
+  '....oooo....',
+  '...o....o...',
+  '...o....o...',
+  '..oooooooo..',
+  '.offffffffo.',
+  '.offfkkfffo.',
+  '.offfkkfffo.',
+  '.offffffffo.',
+  '..oooooooo..',
+  '............',
+  '............',
+]
+
+/** Телефон: MFA и вторые факторы. 12×12. */
+export const ICON_PHONE: PixelMap = [
+  '...oooooo...',
+  '...offffo...',
+  '...owwwwo...',
+  '...owwwwo...',
+  '...owwwwo...',
+  '...owwwwo...',
+  '...offffo...',
+  '...offffo...',
+  '...ofeffo...',
+  '...offffo...',
+  '...oooooo...',
+  '............',
+]
+
+/** Палитра маркеров на треке, 12×8. */
+export const MARKER_PALETTE: Record<string, string> = {
   o: '#12152b',
   w: '#f4f6ff',
   d: '#9aa3d8',
@@ -152,6 +344,7 @@ export const LETTER_PALETTE: Record<string, string> = {
   r: '#ff5d6e',
 }
 
+/** Маркер «письмо» — путь письма по конвейеру. 12×8. */
 export const LETTER: PixelMap = [
   '..oooooooo..',
   '.ocwwwwwwwo.',
@@ -163,8 +356,32 @@ export const LETTER: PixelMap = [
   '............',
 ]
 
-/** Конверт под арестом: замок поверх. */
-export const LETTER_LOCKED: PixelPatch = [
+/** Маркер «вредонос» — красный жук. 12×8. */
+export const BUG: PixelMap = [
+  '............',
+  '..o..oo..o..',
+  '...oooooo...',
+  '..orrrrrro..',
+  '.oorrrrrroo.',
+  '..orwrrwro..',
+  '...oooooo...',
+  '..o.o..o.o..',
+]
+
+/** Маркер «данные» — документ со строками. 12×8. */
+export const FILE: PixelMap = [
+  '..oooooooo..',
+  '.owwwwwwwwo.',
+  '.owddddwwwo.',
+  '.owwwwwwwwo.',
+  '.owddddddwo.',
+  '.owwwwwwwwo.',
+  '..oooooooo..',
+  '............',
+]
+
+/** Замок поверх любого маркера: объект поимки «под арестом». */
+export const MARKER_LOCK: PixelPatch = [
   [4, 2, 'o'], [5, 2, 'o'], [6, 2, 'o'], [7, 2, 'o'],
   [4, 3, 'o'], [5, 3, 'k'], [6, 3, 'k'], [7, 3, 'o'],
   [4, 4, 'o'], [5, 4, 'k'], [6, 4, 'k'], [7, 4, 'o'],

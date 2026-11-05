@@ -1,5 +1,5 @@
 /* ============================================================================
-   ПУТЬ ПИСЬМА · ночная смена SOC встречает 16-бит
+   СТЕНД СЗИ · ночная смена SOC встречает 16-бит
    Палитра: глубокий сине-фиолетовый фон, семантические акценты состояний,
    золотой — маскот. Пиксельный шрифт — только в акцентах.
    ========================================================================= */
@@ -381,6 +381,14 @@ button {
   border-color: color-mix(in srgb, var(--red) 70%, var(--line));
 }
 
+.scenariocard--warn {
+  border-color: color-mix(in srgb, var(--amber) 40%, var(--line));
+}
+
+.scenariocard--warn:hover {
+  border-color: color-mix(in srgb, var(--amber) 70%, var(--line));
+}
+
 .scenariocard__top {
   display: flex;
   gap: 8px;
@@ -520,7 +528,8 @@ button {
 
 /* состояния узлов */
 .node[data-state='passed'],
-.node[data-state='delivered'] {
+.node[data-state='delivered'],
+.node[data-state='defended'] {
   --px-o: #2f9e67;
   --px-f: rgba(78, 229, 138, 0.18);
   --px-e: var(--green);
@@ -564,8 +573,8 @@ button {
   }
 }
 
-/* конверт едёт по треку */
-.letter {
+/* маркер едёт по треку: письмо / вредонос / данные */
+.marker {
   position: absolute;
   top: 24px;
   left: calc((var(--col, 0) + 0.5) * 100% / var(--nodes, 6));
@@ -576,14 +585,14 @@ button {
   filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.45));
 }
 
-.letter__sprite {
+.marker__sprite {
   display: block;
   width: 100%;
   height: auto;
   image-rendering: pixelated;
 }
 
-.letter[data-locked] {
+.marker[data-locked] {
   filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.45)) drop-shadow(0 0 9px rgba(255, 93, 110, 0.5));
 }
 
@@ -620,6 +629,15 @@ button {
   padding: 8px 14px;
   border-left: 3px solid var(--line-bright);
   margin-bottom: 14px;
+}
+
+.scenepanel__actquote-id {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-style: normal;
+  color: var(--ink-dim);
+  opacity: 0.8;
+  white-space: nowrap;
 }
 
 .scenepanel__title {
@@ -780,36 +798,13 @@ button {
   }
 }
 
-.bubble--dirty {
-  border-color: var(--amber);
-}
-
-.bubble--dirty::before {
-  border-color: var(--amber);
-}
-
-.bubble__edit {
-  position: absolute;
-  right: 8px;
-  bottom: 8px;
-  padding: 3px 8px;
+/* id реплики — якорь для ссылок при правках текстов в исходниках */
+.bubble__id {
+  margin-top: 10px;
+  font-family: var(--font-mono);
   font-size: 11px;
   color: var(--ink-dim);
-  background: transparent;
-  border: 2px solid transparent;
-  border-radius: var(--radius);
-  cursor: pointer;
-}
-
-.bubble__edit:hover {
-  color: var(--cyan);
-  border-color: var(--line);
-}
-
-.run__unsaved {
-  color: var(--amber);
-  font-size: 12px;
-  font-family: var(--font-mono);
+  opacity: 0.8;
 }
 
 /* --------------------------------------------------------- финальная карточка */
@@ -821,14 +816,14 @@ button {
   background: var(--bg-raised);
 }
 
-.finalcard--blocked {
+.finalcard--danger {
   border-color: var(--red);
   background:
     linear-gradient(160deg, rgba(255, 93, 110, 0.1), transparent 60%),
     var(--bg-raised);
 }
 
-.finalcard--delivered {
+.finalcard--success {
   border-color: var(--green);
   background:
     linear-gradient(160deg, rgba(78, 229, 138, 0.09), transparent 60%),
@@ -840,12 +835,12 @@ button {
   margin-bottom: 10px;
 }
 
-.finalcard--blocked .finalcard__banner {
+.finalcard--danger .finalcard__banner {
   color: var(--red);
   text-shadow: 3px 3px 0 rgba(255, 93, 110, 0.2);
 }
 
-.finalcard--delivered .finalcard__banner {
+.finalcard--success .finalcard__banner {
   color: var(--green);
   text-shadow: 3px 3px 0 rgba(78, 229, 138, 0.18);
 }
@@ -933,179 +928,6 @@ button {
   color: var(--ink-dim);
   font-size: 13px;
   font-family: var(--font-mono);
-}
-
-/* -------------------------------------------------------------- редактор */
-
-.editor__overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  display: flex;
-  justify-content: flex-end;
-  background: rgba(5, 7, 18, 0.68);
-}
-
-.editor {
-  display: flex;
-  flex-direction: column;
-  width: min(520px, 100vw);
-  height: 100%;
-  background: var(--bg-raised);
-  border-left: 3px solid var(--line-bright);
-}
-
-.editor__head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 18px 20px 12px;
-  border-bottom: 2px solid var(--line);
-}
-
-.editor__title {
-  font-size: 18px;
-  margin-bottom: 6px;
-}
-
-.editor__note {
-  color: var(--ink-dim);
-  font-size: 13px;
-  max-width: 38ch;
-}
-
-.editor__close {
-  flex: none;
-  padding: 6px 10px;
-  font-size: 13px;
-}
-
-.editor__actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  padding: 12px 20px;
-  border-bottom: 2px solid var(--line);
-  background: var(--bg-inset);
-}
-
-.editor__confirm {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--amber);
-  flex-wrap: wrap;
-}
-
-.editor__confirm .btn {
-  padding: 5px 10px;
-  font-size: 13px;
-}
-
-.editor__list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 8px 20px 24px;
-}
-
-.editor__scenario-title {
-  font-size: 10px;
-  color: var(--cyan);
-  margin: 18px 0 10px;
-}
-
-.editor__item {
-  padding: 10px 12px;
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-  margin-bottom: 10px;
-  background: var(--bg-inset);
-}
-
-.editor__item--current {
-  border-color: var(--cyan);
-  background: rgba(89, 227, 224, 0.08);
-  box-shadow: 0 0 0 3px rgba(89, 227, 224, 0.16);
-}
-
-.editor__item[data-kind='act'] {
-  border-style: dashed;
-}
-
-.editor__item-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.editor__item-owner {
-  font-size: 13.5px;
-  font-weight: 700;
-}
-
-.editor__flags {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.editor__flag {
-  font-size: 10px;
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink-dim);
-}
-
-.editor__flag--unsaved {
-  color: var(--amber);
-}
-
-.editor__reset {
-  padding: 1px 7px;
-  font-size: 14px;
-  line-height: 1.4;
-  color: var(--ink-dim);
-  background: var(--bg-raised);
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-  cursor: pointer;
-}
-
-.editor__reset:hover {
-  color: var(--cyan);
-  border-color: var(--cyan);
-}
-
-.editor__item textarea {
-  width: 100%;
-  min-height: 74px;
-  resize: vertical;
-  font: inherit;
-  font-size: 14.5px;
-  line-height: 1.5;
-  color: var(--ink);
-  background: var(--bg);
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-  padding: 8px 10px;
-}
-
-.editor__item textarea:focus {
-  outline: none;
-  border-color: var(--cyan);
-}
-
-.editor__current-note {
-  margin-top: 6px;
-  font-size: 11px;
-  font-family: var(--font-mono);
-  color: var(--cyan);
 }
 
 /* ---------------------------------------------------------------- маскот */
@@ -1256,7 +1078,7 @@ button {
     margin-top: 0;
   }
 
-  .letter {
+  .marker {
     left: 26px;
     top: calc((var(--col, 0) + 0.5) * 100% / var(--nodes, 6));
     width: 38px;

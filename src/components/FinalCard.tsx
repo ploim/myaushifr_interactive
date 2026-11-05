@@ -17,10 +17,10 @@ interface FinalCardProps {
 /** Итоговая карточка сценария: вердикт и резюме всех проверок. */
 export const FinalCard = forwardRef<HTMLDivElement, FinalCardProps>(function FinalCard({ step }, ref) {
   const { scenario } = step
-  const blocked = scenario.outcome === 'blocked'
+  const danger = scenario.verdictTone === 'danger'
   return (
     <div
-      className={`finalcard${blocked ? ' finalcard--blocked' : ' finalcard--delivered'}`}
+      className={`finalcard${danger ? ' finalcard--danger' : ' finalcard--success'}`}
       ref={ref}
       tabIndex={-1}
     >

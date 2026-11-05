@@ -1,7 +1,7 @@
 import { forwardRef } from 'react'
 import { PixelSprite } from '../pixel/PixelSprite'
 import { CAP, CAP_PALETTE, ICON_PALETTE } from '../pixel/maps'
-import { Mascot } from './Mascot'
+import { SpeakingMascot } from './SpeakingMascot'
 import { THEORY } from '../data/theory'
 
 interface TheoryScreenProps {
@@ -9,7 +9,8 @@ interface TheoryScreenProps {
 }
 
 /** Теоретический модуль: короткие объяснения всех СЗИ и подразделений.
- *  Кнопка «К сценариям» — только в самом конце: страницу читают целиком. */
+ *  Мяушифр в академическом колпаке напутствует репликой, кнопка
+ *  «К сценариям» — только в самом конце: страницу читают целиком. */
 export const TheoryScreen = forwardRef<HTMLDivElement, TheoryScreenProps>(function TheoryScreen(
   { onStart },
   ref,
@@ -26,10 +27,13 @@ export const TheoryScreen = forwardRef<HTMLDivElement, TheoryScreenProps>(functi
             словах. Дальше каждое покажет себя в деле!
           </p>
         </div>
-        <div className="acad-cat">
-          <PixelSprite map={CAP} palette={CAP_PALETTE} className="acad-cat__cap" />
-          <Mascot mood="idle" size={148} />
-        </div>
+        <SpeakingMascot
+          mood="idle"
+          size={148}
+          className="theory__speaker"
+          quote="Мяу! В моём академическом колпаке — вся мудрость защиты: прочитай азбуку до конца, и каждое слово встретится тебе в сценариях!"
+          overlay={<PixelSprite map={CAP} palette={CAP_PALETTE} className="speaker-overlay--cap" />}
+        />
       </header>
 
       {THEORY.map((group) => (

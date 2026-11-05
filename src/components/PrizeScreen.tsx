@@ -1,17 +1,30 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
+import { PixelSprite } from '../pixel/PixelSprite'
+import { GIFT, GIFT_PALETTE } from '../pixel/maps'
 import { SpeakingMascot } from './SpeakingMascot'
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 
-const SPARK_COLORS = ['#59e3e0', '#f2c14e', '#ff5d6e', '#4ee58a', '#8d8ef0'] as const
-const SPARK_COUNT = 36
+const SPARK_COLORS = ['#59e3e0', '#f2c14e', '#ff5d6e', '#4ee58a', '#8d8ef0', '#ffffff', '#ff9f43', '#ff8ccf'] as const
+const SPARK_SHAPES = ['sq', 'plus', 'mini'] as const
+const BURST_LIFETIME = 2000
+const BURST_INTERVAL = 850
+
+type SparkShape = (typeof SPARK_SHAPES)[number]
 
 interface Spark {
-  side: 'left' | 'right'
+  left: number
   tx: number
   ty: number
   color: string
   delay: number
   size: number
+  shape: SparkShape
+}
+
+interface Burst {
+  id: number
+  sparks: Spark[]
 }
 
 interface PrizeScreenProps {
@@ -22,32 +35,58 @@ interface PrizeScreenProps {
  *  сообщение для ведущего. */
 export function PrizeScreen({ onBack }: PrizeScreenProps) {
   const [claimed, setClaimed] = useState(false)
+  const [bursts, setBursts] = useState<Burst[]>([])
   const modalRef = useRef<HTMLDivElement>(null)
+  const seqRef = useRef(0)
+  const timeoutsRef = useRef<number[]>([])
+  const reducedMotion = usePrefersReducedMotion()
 
-  // параметры разлёта частиц считаем один раз — состав фиксированный
-  const sparks = useMemo<Spark[]>(
-    () =>
-      Array.from({ length: SPARK_COUNT }, (_, i): Spark => {
-        const side = i % 2 === 0 ? 'left' : 'right'
-        const angle = 0.35 + Math.random() * 0.75 // рад, от вертикали
-        const dist = 160 + Math.random() * 260
-        const dir = side === 'left' ? 1 : -1
-        return {
-          side,
-          tx: Math.round(dir * Math.sin(angle) * dist),
-          ty: -Math.round(60 + Math.cos(angle) * dist),
-          color: SPARK_COLORS[i % SPARK_COLORS.length],
-          delay: (i % 6) * 0.14,
-          size: 8 + (i % 3) * 4,
-        }
-      }),
-    [],
-  )
-
-  // фокус внутрь модалки, чтобы скринридер озвучил призовое сообщение
+  // Фокус внутрь модалки, чтобы скринридер озвучил призовое сообщение
   useEffect(() => {
     if (claimed) modalRef.current?.focus()
   }, [claimed])
+
+  // Салюты продолжаются, пока открыта модалка: залп за залпом из случайной
+  // точки внизу. При reduced-motion залпы не спавним — анимация всё равно
+  // заморожена глобальным CSS.
+  useEffect(() => {
+    if (!claimed || reducedMotion) return
+
+    const spawn = () => {
+      const id = seqRef.current + 1
+      seqRef.current = id
+      const origin = 6 + Math.random() * 88
+      const count = 22 + Math.floor(Math.random() * 12)
+      const sparks: Spark[] = Array.from({ length: count }, () => {
+        const angle = (Math.random() - 0.5) * 2.4 // ±69° от вертикали
+        const dist = 180 + Math.random() * 320
+        return {
+          left: Math.round(origin + (Math.random() - 0.5) * 10),
+          tx: Math.round(Math.sin(angle) * dist),
+          ty: -Math.round(80 + Math.cos(angle) * dist * 0.9),
+          color: SPARK_COLORS[Math.floor(Math.random() * SPARK_COLORS.length)],
+          delay: Math.round(Math.random() * 35) / 100,
+          size: 6 + Math.floor(Math.random() * 4) * 3,
+          shape: SPARK_SHAPES[Math.floor(Math.random() * SPARK_SHAPES.length)],
+        }
+      })
+      setBursts((prev) => [...prev, { id, sparks }])
+      timeoutsRef.current.push(
+        window.setTimeout(() => {
+          setBursts((prev) => prev.filter((burst) => burst.id !== id))
+        }, BURST_LIFETIME),
+      )
+    }
+
+    spawn()
+    const timer = window.setInterval(spawn, BURST_INTERVAL)
+    return () => {
+      window.clearInterval(timer)
+      timeoutsRef.current.forEach((t) => window.clearTimeout(t))
+      timeoutsRef.current = []
+      setBursts([])
+    }
+  }, [claimed, reducedMotion])
 
   return (
     <div className="prize">
@@ -64,6 +103,7 @@ export function PrizeScreen({ onBack }: PrizeScreenProps) {
         mood="happy"
         quote="Мяу-мяу! Ты справился: три атаки — как три мыши в зубах! Забирай подарок, ты честно его поймал!"
         size={170}
+        overlay={<PixelSprite map={GIFT} palette={GIFT_PALETTE} className="speaker-overlay--gift" />}
       />
 
       <div className="prize__actions">
@@ -80,26 +120,30 @@ export function PrizeScreen({ onBack }: PrizeScreenProps) {
 
       {claimed && (
         <>
-          {/* пиксельные салюты: клетки разлетаются из нижних углов прыжками */}
+          {/* пиксельные салюты: залпы из низа экрана, залп за залпом,
+              пока модалка открыта */}
           <div className="salute" aria-hidden="true">
-            {sparks.map((spark, i) => (
-              <span
-                key={i}
-                className="salute__spark"
-                style={
-                  {
-                    left: spark.side === 'left' ? '4%' : 'auto',
-                    right: spark.side === 'right' ? '4%' : 'auto',
-                    width: spark.size,
-                    height: spark.size,
-                    background: spark.color,
-                    animationDelay: `${spark.delay}s`,
-                    '--tx': `${spark.tx}px`,
-                    '--ty': `${spark.ty}px`,
-                  } as CSSProperties
-                }
-              />
-            ))}
+            {bursts.map((burst) =>
+              burst.sparks.map((spark, i) => (
+                <span
+                  key={`${burst.id}-${i}`}
+                  className="salute__spark"
+                  style={
+                    {
+                      left: `${spark.left}%`,
+                      animationDelay: `${spark.delay}s`,
+                      '--tx': `${spark.tx}px`,
+                      '--ty': `${spark.ty}px`,
+                    } as CSSProperties
+                  }
+                >
+                  <span
+                    className={`salute__shape salute__shape--${spark.shape}`}
+                    style={{ width: spark.size, height: spark.size, '--spark-color': spark.color } as CSSProperties}
+                  />
+                </span>
+              )),
+            )}
           </div>
 
           <div
@@ -117,8 +161,8 @@ export function PrizeScreen({ onBack }: PrizeScreenProps) {
               <p className="prizemodal__secret px-text">
                 Не забудь посетить тайное собрание Мяушифра!
               </p>
-              <button type="button" className="btn btn--primary" onClick={onBack}>
-                Весело! К сценариям
+              <button type="button" className="btn btn--primary btn--pixel" onClick={onBack}>
+                Назад к сценариям
               </button>
             </div>
           </div>

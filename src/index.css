@@ -607,13 +607,53 @@ button {
   overflow: hidden;
 }
 
-/* клетка-искра летит из нижнего угла прыжками по «тайлам» */
+/* искра летит из низа экрана прыжками по «тайлам»; форма — клетка,
+   крест или мелкая клетка, залпы идут волнами, пока модалка открыта */
 .salute__spark {
   position: absolute;
   bottom: -4vh;
   image-rendering: pixelated;
-  animation: salute-fly 1.6s steps(14) forwards;
+  animation: salute-fly 1.5s steps(12) forwards;
   opacity: 0;
+}
+
+.salute__shape {
+  display: block;
+}
+
+.salute__shape--sq,
+.salute__shape--mini {
+  background: var(--spark-color, #ffffff);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45);
+}
+
+.salute__shape--mini {
+  transform: scale(0.55);
+}
+
+.salute__shape--plus {
+  position: relative;
+}
+
+.salute__shape--plus::before,
+.salute__shape--plus::after {
+  content: '';
+  position: absolute;
+  background: var(--spark-color, #ffffff);
+}
+
+.salute__shape--plus::before {
+  left: 0;
+  right: 0;
+  top: 33%;
+  bottom: 33%;
+}
+
+.salute__shape--plus::after {
+  top: 0;
+  bottom: 0;
+  left: 33%;
+  right: 33%;
 }
 
 @keyframes salute-fly {
@@ -700,21 +740,51 @@ button {
   min-width: 0;
 }
 
-/* Мяушифр-академик: колпак лежит поверх головы */
-.acad-cat {
-  position: relative;
+/* Мяушифр-академик: доска колпака лежит ПОВЕРХ макушки PNG */
+.theory__speaker {
   flex: none;
-  padding-top: 18px;
+}
+
+.theory__speaker .speaker__bubble {
+  max-width: 340px;
+}
+
+.theory__speaker .speaker__cat {
+  /* запас под торчащий вверх колпак */
+  margin-top: 16px;
+}
+
+/* кот и его декор: декор абсолютом поверх PNG, а не за ним */
+.speaker__cat {
+  position: relative;
   line-height: 0;
 }
 
-.acad-cat__cap {
+.speaker__overlay {
   position: absolute;
-  top: -4%;
-  left: 50%;
-  width: 62%;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* посадка колпака на макушку: доска-ромб сверху, тёмное основание
+   (нижние строки карты) надевается на голову между ушей (X≈33–65%) */
+.speaker-overlay--cap {
+  position: absolute;
+  top: -14%;
+  left: 49%;
+  width: 72%;
   transform: translateX(-50%);
   filter: drop-shadow(0 3px 0 rgba(9, 11, 23, 0.55));
+}
+
+/* подарок в лапе — перекрывает щит (щит: X 68–95%, Y 48–88%) */
+.speaker-overlay--gift {
+  position: absolute;
+  left: 64%;
+  top: 51%;
+  width: 30%;
+  filter: drop-shadow(3px 3px 0 rgba(9, 11, 23, 0.45));
 }
 
 .theory__eyebrow {
@@ -1414,7 +1484,7 @@ button {
     padding: 22px 16px;
   }
 
-  .acad-cat .mascot {
+  .theory__speaker .mascot {
     width: 116px !important;
   }
 

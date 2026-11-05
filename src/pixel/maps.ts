@@ -524,18 +524,44 @@ export const CAP_PALETTE: Record<string, string> = {
   w: '#e9ecff',
 }
 
-/** Академический колпак для Мяушифра: доска-ромб с бликом,
- *  тёмное основание и золотая кисточка на шнурке. 16×9. */
+/** Академический колпак для Мяушифра: плоская доска-ромб
+ *  со светлой окантовкой, золотой пуговкой и кисточкой на шнурке. 18×7.
+ *  Кладётся поверх макушки маскота (см. .speaker-overlay--cap). */
 export const CAP: PixelMap = [
-  '.......bb.......',
-  '......wbbb......',
-  '.....wbbbbb.....',
-  '....wbbbbbbb....',
-  '...wbbbbbbbbb...',
-  '..wbbbbbbbbbbb..',
-  '.wbbbbbbbbbbbbb.',
-  '....dddddddd..g.',
-  '....ddddddddd.gg',
+  '........gg........',
+  '......wwbbww......',
+  '....wwbbbbbbww....',
+  '..wwbbbbbbbbbbww..',
+  '....bbbbbbbbbb.d..',
+  '.....dddddddd..d..',
+  '.....dddddddd..d..',
+  '.....dddddddd.ggg.',
+  '.....dddddddd.....',
+]
+
+/** Палитра подарка. */
+export const GIFT_PALETTE: Record<string, string> = {
+  r: '#ff5d6e',
+  g: '#f2c14e',
+  d: '#3d2447',
+  w: '#ffe9ec',
+}
+
+/** Сладкий приз Мяушифра: коробка с бантом и золотой лентой. 12×12.
+ *  Перекрывает щит в лапе маскота (см. .speaker-overlay--gift). */
+export const GIFT: PixelMap = [
+  '..gg....gg..',
+  '...gggggg...',
+  '.dddddddddd.',
+  '.drrrrrrrrd.',
+  '.dddddddddd.',
+  'dddddddddddd',
+  'drrrrggrrrrd',
+  'drrrrggrrrrd',
+  'drrwwggwwrrd',
+  'drrrrggrrrrd',
+  'drrrrggrrrrd',
+  'dddddddddddd',
 ]
 
 /** Замок поверх любого маркера: объект поимки «под арестом». */

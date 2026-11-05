@@ -519,6 +519,18 @@ const CARD = [
   '............',
 ]
 
+const CAP = [
+  '.......bb.......',
+  '......wbbb......',
+  '.....wbbbbb.....',
+  '....wbbbbbbb....',
+  '...wbbbbbbbbb...',
+  '..wbbbbbbbbbbb..',
+  '.wbbbbbbbbbbbbb.',
+  '....dddddddd..g.',
+  '....ddddddddd.gg',
+]
+
 show('LETTER', LETTER)
 show('LETTER locked', applyPatch(LETTER, MARKER_LOCK))
 show('BUG', BUG)
@@ -529,3 +541,4 @@ show('KEYMARKER', KEYMARKER)
 show('KEYMARKER locked', applyPatch(KEYMARKER, MARKER_LOCK))
 show('CARD', CARD)
 show('CARD locked', applyPatch(CARD, MARKER_LOCK))
+show('CAP (академический колпак)', CAP)

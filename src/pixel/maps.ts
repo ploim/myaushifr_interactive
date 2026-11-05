@@ -516,6 +516,28 @@ export const CARD: PixelMap = [
   '............',
 ]
 
+/** Палитра академического колпака. */
+export const CAP_PALETTE: Record<string, string> = {
+  b: '#8d8ef0',
+  d: '#5658c4',
+  g: '#f2c14e',
+  w: '#e9ecff',
+}
+
+/** Академический колпак для Мяушифра: доска-ромб с бликом,
+ *  тёмное основание и золотая кисточка на шнурке. 16×9. */
+export const CAP: PixelMap = [
+  '.......bb.......',
+  '......wbbb......',
+  '.....wbbbbb.....',
+  '....wbbbbbbb....',
+  '...wbbbbbbbbb...',
+  '..wbbbbbbbbbbb..',
+  '.wbbbbbbbbbbbbb.',
+  '....dddddddd..g.',
+  '....ddddddddd.gg',
+]
+
 /** Замок поверх любого маркера: объект поимки «под арестом». */
 export const MARKER_LOCK: PixelPatch = [
   [4, 2, 'o'], [5, 2, 'o'], [6, 2, 'o'], [7, 2, 'o'],

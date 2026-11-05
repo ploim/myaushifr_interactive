@@ -2,21 +2,38 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Mascot } from './components/Mascot'
 import { Controls } from './components/Controls'
 import { FinalCard } from './components/FinalCard'
+import { PrizeScreen } from './components/PrizeScreen'
 import { ScenarioPicker } from './components/ScenarioPicker'
 import { ScenePanel } from './components/ScenePanel'
 import { StageMap } from './components/StageMap'
 import { TheoryScreen } from './components/TheoryScreen'
+import { WelcomeScreen } from './components/WelcomeScreen'
 import { flatten, type Scenario } from './data/scenarios'
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion'
 import { useTypewriter } from './hooks/useTypewriter'
 
 /** Какой экран показывать вне прогона сценария. */
-type Screen = 'theory' | 'picker'
+type Screen = 'welcome' | 'theory' | 'picker' | 'prize'
+
+/** Сколько сценариев открывают приз. */
+const PRIZE_GOAL = 3
+const PROGRESS_KEY = 'meaw-progress'
+
+function loadProgress(): string[] {
+  try {
+    const raw = localStorage.getItem(PROGRESS_KEY)
+    const parsed = raw ? JSON.parse(raw) : []
+    return Array.isArray(parsed) ? parsed.filter((id) => typeof id === 'string') : []
+  } catch {
+    return []
+  }
+}
 
 export default function App() {
-  const [screen, setScreen] = useState<Screen>('theory')
+  const [screen, setScreen] = useState<Screen>('welcome')
   const [scenario, setScenario] = useState<Scenario | null>(null)
   const [index, setIndex] = useState(0)
+  const [done, setDone] = useState<string[]>(() => loadProgress())
   const reducedMotion = usePrefersReducedMotion()
 
   const steps = useMemo(() => (scenario ? flatten(scenario) : []), [scenario])
@@ -37,6 +54,22 @@ export default function App() {
     setScenario(null)
     setIndex(0)
   }, [])
+
+  // Сценарий считается пройденным, когда игрок дошёл до финальной сцены.
+  useEffect(() => {
+    if (!step?.scene.finale) return
+    const id = step.scenario.id
+    setDone((prev) => {
+      if (prev.includes(id)) return prev
+      const nextDone = [...prev, id]
+      try {
+        localStorage.setItem(PROGRESS_KEY, JSON.stringify(nextDone))
+      } catch {
+        // localStorage недоступен — прогресс живёт до перезагрузки
+      }
+      return nextDone
+    })
+  }, [step])
 
   // Фокус на начало теормодуля при входе в него.
   useEffect(() => {
@@ -82,10 +115,19 @@ export default function App() {
 
       <main id="main" className="app__main">
         {!scenario || !step ? (
-          screen === 'theory' ? (
+          screen === 'welcome' ? (
+            <WelcomeScreen onStart={() => setScreen('theory')} doneCount={done.length} />
+          ) : screen === 'theory' ? (
             <TheoryScreen ref={theoryRef} onStart={() => setScreen('picker')} />
+          ) : screen === 'prize' && done.length >= PRIZE_GOAL ? (
+            <PrizeScreen onBack={() => setScreen('picker')} />
           ) : (
-            <ScenarioPicker onStart={start} onTheory={() => setScreen('theory')} />
+            <ScenarioPicker
+              onStart={start}
+              onTheory={() => setScreen('theory')}
+              onPrize={() => setScreen('prize')}
+              doneCount={done.length}
+            />
           )
         ) : (
           <>
@@ -113,8 +155,6 @@ export default function App() {
                   </p>
                   {/* полный текст — сразу, посимвольная печать озвучке мешает */}
                   <p className="visually-hidden">«{sceneQuote}»</p>
-                  {/* id реплики — якорь для правок в src/data/scenarios.ts */}
-                  <p className="bubble__id">реплика {step.scene.id}</p>
                 </div>
                 <Mascot mood={step.scene.mood} talking={talking} size={190} className="run__cat" />
                 <p className="run__catname px-text">Мяушифр</p>

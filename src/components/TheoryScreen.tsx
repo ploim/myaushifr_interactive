@@ -1,13 +1,15 @@
 import { forwardRef } from 'react'
 import { PixelSprite } from '../pixel/PixelSprite'
-import { ICON_PALETTE } from '../pixel/maps'
+import { CAP, CAP_PALETTE, ICON_PALETTE } from '../pixel/maps'
+import { Mascot } from './Mascot'
 import { THEORY } from '../data/theory'
 
 interface TheoryScreenProps {
   onStart: () => void
 }
 
-/** Теоретический модуль: короткие объяснения всех СЗИ и подразделений. */
+/** Теоретический модуль: короткие объяснения всех СЗИ и подразделений.
+ *  Кнопка «К сценариям» — только в самом конце: страницу читают целиком. */
 export const TheoryScreen = forwardRef<HTMLDivElement, TheoryScreenProps>(function TheoryScreen(
   { onStart },
   ref,
@@ -15,15 +17,19 @@ export const TheoryScreen = forwardRef<HTMLDivElement, TheoryScreenProps>(functi
   return (
     <div className="theory" ref={ref} tabIndex={-1}>
       <header className="theory__head">
-        <p className="theory__eyebrow px-text">Теория перед демонстрациями</p>
-        <h1 className="theory__title px-text">Азбука защиты</h1>
-        <p className="theory__lead">
-          Все решения и подразделения, которые встретятся в сценариях, — в двух-трёх
-          предложениях каждое. Дальше каждое покажет себя в деле.
-        </p>
-        <button type="button" className="btn btn--primary btn--pixel theory__start" onClick={onStart}>
-          К сценариям →
-        </button>
+        <div className="theory__headtext">
+          <p className="theory__eyebrow px-text">Теория перед демонстрациями</p>
+          <h1 className="theory__title px-text">Азбука защиты</h1>
+          <p className="theory__lead">
+            Для профессии в области информационной безопасности характерны
+            некоторые понятия и концепции, ниже они раскрыты в нескольких
+            словах. Дальше каждое покажет себя в деле!
+          </p>
+        </div>
+        <div className="acad-cat">
+          <PixelSprite map={CAP} palette={CAP_PALETTE} className="acad-cat__cap" />
+          <Mascot mood="idle" size={148} />
+        </div>
       </header>
 
       {THEORY.map((group) => (

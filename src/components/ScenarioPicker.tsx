@@ -4,10 +4,15 @@ import { SCENARIOS, flatten, type Scenario } from '../data/scenarios'
 interface ScenarioPickerProps {
   onStart: (scenario: Scenario) => void
   onTheory: () => void
+  onPrize: () => void
+  /** Сколько сценариев уже пройдено (до финальной сцены). */
+  doneCount: number
 }
 
-/** Пустое состояние: выбор сценария. */
-export function ScenarioPicker({ onStart, onTheory }: ScenarioPickerProps) {
+/** Выбор сценария: сверху — прогресс приключения и приз. */
+export function ScenarioPicker({ onStart, onTheory, onPrize, doneCount }: ScenarioPickerProps) {
+  const prizeReady = doneCount >= 3
+
   return (
     <div className="picker">
       <div className="picker__hero">
@@ -18,10 +23,31 @@ export function ScenarioPicker({ onStart, onTheory }: ScenarioPickerProps) {
             Интерактивные истории о том, как средства защиты информации ловят атаки:
             от вредоносной почты до брутфорса. Выберите сценарий и идите по шагам.
           </p>
-          <button type="button" className="btn btn--ghost" onClick={onTheory}>
+          <button type="button" className="btn btn--primary btn--pixel" onClick={onTheory}>
             ← Азбука защиты
           </button>
         </div>
+      </div>
+
+      <div className="progress" role="status" aria-live="polite">
+        <div className="progress__info">
+          <p className="progress__label px-text">Прогресс приключения</p>
+          <p className="progress__count">
+            {prizeReady
+              ? `Пройдено сценариев: ${doneCount} — приз ждёт!`
+              : `Пройдено сценариев: ${doneCount} из 3 — и сладкий приз твой`}
+          </p>
+        </div>
+        <div className="progress__bar" aria-hidden="true">
+          {[0, 1, 2].map((i) => (
+            <span key={i} className={`progress__cell${i < doneCount ? ' progress__cell--on' : ''}`} />
+          ))}
+        </div>
+        {prizeReady && (
+          <button type="button" className="btn btn--primary btn--pixel" onClick={onPrize}>
+            Забрать сладкий приз
+          </button>
+        )}
       </div>
 
       <div className="picker__cards">

@@ -7,13 +7,16 @@ import { ScenarioPicker } from './components/ScenarioPicker'
 import { ScenePanel } from './components/ScenePanel'
 import { StageMap } from './components/StageMap'
 import { flatten, type Scenario } from './data/scenarios'
+import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion'
 import { useQuotes } from './hooks/useQuotes'
+import { useTypewriter } from './hooks/useTypewriter'
 
 export default function App() {
   const [scenario, setScenario] = useState<Scenario | null>(null)
   const [index, setIndex] = useState(0)
   const [editorOpen, setEditorOpen] = useState(false)
   const quotes = useQuotes()
+  const reducedMotion = usePrefersReducedMotion()
 
   const steps = useMemo(() => (scenario ? flatten(scenario) : []), [scenario])
   const step = steps[index]
@@ -67,6 +70,11 @@ export default function App() {
   const sceneQuote = step ? quotes.quote(step.scene.id) : ''
   const quoteDirty = step ? quotes.isDraftDirty(step.scene.id) : false
 
+  // Реплика печатается по буквам, кот «говорит» — открывает рот в такт печати.
+  // При открытом редакторе и reduced-motion текст появляется целиком.
+  const typing = useTypewriter(sceneQuote, Boolean(step) && !editorOpen && !reducedMotion)
+  const talking = !typing.done
+
   return (
     <div className="app">
       <a className="skip-link" href="#main">
@@ -108,10 +116,13 @@ export default function App() {
               </div>
 
               <aside className="run__mascot" aria-label="Комментарий Мяушифра">
-                <Mascot mood={step.scene.mood} size={190} className="run__cat" />
-                <p className="run__catname px-text">Мяушифр</p>
                 <div className={`bubble${quoteDirty ? ' bubble--dirty' : ''}`}>
-                  <p>«{sceneQuote}»</p>
+                  <p className="bubble__text" aria-hidden="true">
+                    «{typing.shown}»
+                    {!typing.done && <span className="bubble__caret" />}
+                  </p>
+                  {/* полный текст — сразу, посимвольная печать озвучке мешает */}
+                  <p className="visually-hidden">«{sceneQuote}»</p>
                   <button
                     type="button"
                     className="bubble__edit"
@@ -121,6 +132,8 @@ export default function App() {
                     ✎ править
                   </button>
                 </div>
+                <Mascot mood={step.scene.mood} talking={talking} size={190} className="run__cat" />
+                <p className="run__catname px-text">Мяушифр</p>
                 {quoteDirty && <p className="run__unsaved">реплика не сохранена</p>}
               </aside>
             </div>

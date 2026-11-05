@@ -286,8 +286,8 @@ button {
   min-width: 0;
 }
 
-.app__logo .mascot__sprite {
-  image-rendering: pixelated;
+.app__logo {
+  flex: none;
 }
 
 .app__title {
@@ -328,8 +328,8 @@ button {
     var(--bg-raised);
 }
 
-.picker__cat .mascot__sprite--open {
-  image-rendering: pixelated;
+.picker__cat {
+  flex: none;
 }
 
 .picker__title {
@@ -722,10 +722,6 @@ button {
   top: 14px;
 }
 
-.run__cat .mascot__sprite {
-  image-rendering: pixelated;
-}
-
 .run__catname {
   color: var(--gold);
   font-size: 12px;
@@ -743,17 +739,45 @@ button {
   min-height: 92px;
 }
 
+/* хвост бабла смотрит вниз — на маскота под репликой */
 .bubble::before {
   content: '';
   position: absolute;
-  top: -8px;
+  bottom: -8px;
   left: 26px;
   width: 12px;
   height: 12px;
   background: var(--bg-inset);
-  border-left: 2px solid var(--line-bright);
-  border-top: 2px solid var(--line-bright);
+  border-right: 2px solid var(--line-bright);
+  border-bottom: 2px solid var(--line-bright);
   transform: rotate(45deg);
+}
+
+.bubble__text {
+  min-height: 3.6em;
+}
+
+/* каретка печатающейся реплики */
+.bubble__caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: var(--cyan);
+  animation: caret-blink 0.9s steps(1, end) infinite;
+}
+
+@keyframes caret-blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .bubble--dirty {
@@ -1085,6 +1109,7 @@ button {
 }
 
 /* ---------------------------------------------------------------- маскот */
+/* PNG-спрайты (src/assets/mascot/) из пикселизации исходной картинки */
 
 .mascot {
   position: relative;
@@ -1092,27 +1117,57 @@ button {
   line-height: 0;
 }
 
-.mascot__sprite {
+.mascot__frame {
   display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
 }
 
-.mascot__sprite--blink {
+/* кадр «рот открыт» лежит поверх закрытого и в покое прозрачен */
+.mascot__frame--open {
   position: absolute;
   top: 0;
   left: 0;
   opacity: 0;
-  animation: cat-blink 4.8s infinite;
 }
 
-@keyframes cat-blink {
-  0%,
-  91%,
-  100% {
+/* говорящий кот: резкие пиксельные переключения «открыт ↔ закрыт» */
+.mascot--talking .mascot__frame--open {
+  animation: mouth-flap 0.32s steps(1, end) infinite;
+}
+
+@keyframes mouth-flap {
+  0% {
+    opacity: 1;
+  }
+  50% {
     opacity: 0;
   }
-  93%,
-  96% {
+  100% {
     opacity: 1;
+  }
+}
+
+/* значок настроения поверх спрайта */
+.mascot__badge-wrap {
+  position: absolute;
+  top: -3%;
+  right: -5%;
+  width: 24%;
+  line-height: 0;
+  animation: badge-pop 0.25s ease-out;
+}
+
+.mascot__badge {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@keyframes badge-pop {
+  from {
+    transform: scale(0);
   }
 }
 
@@ -1244,7 +1299,11 @@ button {
     transition-duration: 0.01ms !important;
   }
 
-  .mascot__sprite--blink {
+  .mascot__frame--open {
     display: none;
+  }
+
+  .bubble__caret {
+    animation: none;
   }
 }

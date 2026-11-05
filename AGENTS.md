@@ -18,9 +18,14 @@ node scripts/preview.mjs   # ASCII-превью пиксель-карт + вал
 
 - `src/data/scenarios.ts` — единственный источник сюжетов (акты, сцены, СЗИ,
   реплики, итоги). UI не хардкодит тексты сценария; новые сцены — только сюда.
-- `src/pixel/maps.ts` — пиксельные карты. После ЛЮБОЙ правки запускать
-  `scripts/preview.mjs`: строки карты обязаны быть одной длины, превью
-  показывает, как sprite ляжет на экран.
+- Маскот — PNG-спрайты `src/assets/mascot/{mascot-open,mascot-closed}.png`,
+  генерируются из исходной картинки: `node scripts/mascot-frames.mjs
+  /путь/до/mascot-dod.png`. Ручные правки PNG не коммитить — править скрипт.
+  Рот синхронизирован с печатью реплики: `useTypewriter` → prop `talking` →
+  CSS `mouth-flap`; при reduced-motion текст появляется целиком.
+- `src/pixel/maps.ts` — пиксельные карты (значки, иконки узлов, конверт).
+  После ЛЮБОЙ правки запускать `scripts/preview.mjs`: строки карты обязаны
+  быть одной длины, превью показывает, как sprite ляжет на экран.
 - `src/hooks/useQuotes.ts` — реплики: черновик в состоянии, сохранённое —
   только диффы в localStorage (`dod-mail-journey.quotes.v1`). Менять схему
   ключа = миграция.

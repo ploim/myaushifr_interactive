@@ -1,59 +1,53 @@
+import closedSrc from '../assets/mascot/mascot-closed.png'
+import openSrc from '../assets/mascot/mascot-open.png'
 import { PixelSprite } from '../pixel/PixelSprite'
-import {
-  applyPatch,
-  CAT_ALARM,
-  CAT_ANALYZE,
-  CAT_BLINK,
-  CAT_HAPPY,
-  CAT_IDLE,
-  CAT_PALETTE,
-} from '../pixel/maps'
+import { BADGE_ALARM, BADGE_HAPPY, BADGE_PALETTE, ICON_MAGNIFIER } from '../pixel/maps'
 import type { Mood } from '../data/scenarios'
 import type { CSSProperties } from 'react'
 
-const MOOD_PATCH = {
+// Значки настроений поверх фото-маскота: сам PNG один, настроение — бейджем.
+const MOOD_BADGE = {
   idle: null,
-  happy: CAT_HAPPY,
-  analyze: CAT_ANALYZE,
-  alarm: CAT_ALARM,
+  happy: BADGE_HAPPY,
+  analyze: ICON_MAGNIFIER,
+  alarm: BADGE_ALARM,
 } as const
 
 const MOOD_ALT: Record<Mood, string> = {
-  idle: 'Криптокот Мяушифр сидит и наблюдает',
-  happy: 'Криптокот Мяушифр радуется: прищур, улыбка, искры',
-  analyze: 'Криптокот Мяушифр анализирует: прищур и пиксели сканирования над головой',
-  alarm: 'Криптокот Мяушифр в тревоге: восклицательный знак над головой',
+  idle: 'Кот-защитник Мяушифр со щитом стоит и наблюдает',
+  happy: 'Кот-защитник Мяушифр радуется — над головой искры',
+  analyze: 'Кот-защитник Мяушифр анализирует — рядом лупа',
+  alarm: 'Кот-защитник Мяушифр в тревоге — рядом восклицательный знак',
 }
 
 interface MascotProps {
-  mood: Mood
+  mood?: Mood
+  /** Говорит: рот открывается в такт печати реплики (mouth-flap). */
+  talking?: boolean
   size?: number
   className?: string
   style?: CSSProperties
 }
 
-/** Пиксельный криптокот. В покое медленно моргает (отключается при reduced motion). */
-export function Mascot({ mood, size = 180, className, style }: MascotProps) {
-  const patch = MOOD_PATCH[mood]
-  const open = patch ? applyPatch(CAT_IDLE, patch) : CAT_IDLE
-  const blinks = mood === 'idle' || mood === 'analyze'
+/** Маскот из PNG-спрайтов (пикселизация исходной картинки).
+ *  В покое рот закрыт; при talking чередует кадры «открыт/закрыт»
+ *  с резкими пиксельными переключениями. Глобальный prefers-reduced-motion
+ *  гасит анимацию, а хук печати и вовсе не включает talking. */
+export function Mascot({ mood = 'idle', talking = false, size = 180, className, style }: MascotProps) {
+  const badge = MOOD_BADGE[mood]
+  const cls = ['mascot', `mascot--${mood}`, talking ? 'mascot--talking' : '', className ?? '']
+    .filter(Boolean)
+    .join(' ')
   return (
-    <div className={`mascot mascot--${mood}${className ? ` ${className}` : ''}`} style={style}>
-      <PixelSprite
-        map={open}
-        palette={CAT_PALETTE}
-        title={MOOD_ALT[mood]}
-        className="mascot__sprite mascot__sprite--open"
-        style={{ width: size, height: 'auto' }}
-      />
-      {blinks && (
-        <PixelSprite
-          map={applyPatch(open, CAT_BLINK)}
-          palette={CAT_PALETTE}
-          className="mascot__sprite mascot__sprite--blink"
-          style={{ width: size, height: 'auto' }}
-        />
+    <span className={cls} style={{ width: size, ...style }}>
+      {/* базовый кадр задаёт размер и alt; открытый рот — накладной */}
+      <img className="mascot__frame mascot__frame--closed" src={closedSrc} alt={MOOD_ALT[mood]} />
+      <img className="mascot__frame mascot__frame--open" src={openSrc} alt="" aria-hidden="true" />
+      {badge && (
+        <span className="mascot__badge-wrap" aria-hidden="true">
+          <PixelSprite map={badge} palette={BADGE_PALETTE} className="mascot__badge" />
+        </span>
       )}
-    </div>
+    </span>
   )
 }

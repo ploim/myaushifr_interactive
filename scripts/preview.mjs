@@ -1,4 +1,5 @@
-// ASCII-превью пиксельных карт (спрайты кота, иконки узлов, конверт).
+// ASCII-превью пиксельных карт (значки настроений, иконки узлов, конверт).
+// Сам маскот — PNG-спрайты (scripts/mascot-frames.mjs), тут его нет.
 // Запуск: node scripts/preview.mjs
 const GLYPHS = {
   '.': ' ', o: '#', f: '%', d: '+', l: '-', e: 'O', w: '*', p: 'o', k: '$', c: '@', r: '!',
@@ -19,58 +20,35 @@ function applyPatch(rows, patch) {
   return next
 }
 
-// ---------------- Кот 20x18 ----------------
-const CAT_IDLE = [
-  '....oo........oo....',
-  '...oppo......oppo...',
-  '...offo......offo...',
-  '..offffooooooffffo..',
-  '..offffffffffffffo..',
-  '..offffffffffffffo..',
-  '..offfweffffwefffo..',
-  '..offfeeffffeefffo..',
-  '.woffffffppffffffow.',
-  '.woffflldlldllfffow.',
-  '..offfllllllllfffo..',
-  '...oddddddddddddo...',
-  '...offfffkkfffffoo..',
-  '...offffllllffffofo.',
-  '...offffllllffffofo.',
-  '...ofllllddllllfofo.',
-  '...oooooooooooooofo.',
-  '....................',
+// ---------------- Значки настроений маскота 10x10 ----------------
+const BADGE_ALARM = [
+  '...oooo...',
+  '..offffo..',
+  '.offffffo.',
+  'offfrrfffo',
+  'offfrrfffo',
+  'offfrrfffo',
+  '.offffffo.',
+  '..orrrro..',
+  '...oooo...',
+  '..........',
 ]
 
-const CAT_BLINK = [
-  [6, 6, 'f'], [7, 6, 'f'], [12, 6, 'f'], [13, 6, 'f'],
-  [6, 7, 'd'], [7, 7, 'd'], [12, 7, 'd'], [13, 7, 'd'],
+const BADGE_HAPPY = [
+  '..........',
+  '....k.....',
+  '....k.....',
+  '..kkkkk...',
+  '....k.....',
+  '....k.....',
+  '.......k..',
+  '......kkk.',
+  '.......k..',
+  '..........',
 ]
 
-const CAT_HAPPY = [
-  [6, 6, 'e'], [7, 6, 'f'], [12, 6, 'e'], [13, 6, 'f'],
-  [6, 7, 'f'], [7, 7, 'e'], [12, 7, 'f'], [13, 7, 'e'],
-  [9, 9, 'p'], [10, 9, 'p'],
-  [5, 8, 'p'], [14, 8, 'p'],
-  [9, 0, 'w'], [11, 0, 'c'],
-]
-
-const CAT_ANALYZE = [
-  [6, 7, 'f'], [7, 7, 'f'], [12, 7, 'f'], [13, 7, 'f'],
-  [8, 0, 'c'], [10, 0, 'e'], [12, 0, 'c'],
-]
-
-const CAT_ALARM = [
-  [9, 0, 'r'], [10, 0, 'r'], [9, 1, 'r'], [10, 1, 'r'],
-  [9, 2, 'r'], [10, 2, 'r'],
-  [6, 6, 'w'], [7, 6, 'w'], [12, 6, 'w'], [13, 6, 'w'],
-  [9, 9, 'o'], [10, 9, 'o'],
-]
-
-show('CAT idle', CAT_IDLE)
-show('CAT blink', applyPatch(CAT_IDLE, CAT_BLINK))
-show('CAT happy', applyPatch(CAT_IDLE, CAT_HAPPY))
-show('CAT analyze', applyPatch(CAT_IDLE, CAT_ANALYZE))
-show('CAT alarm', applyPatch(CAT_IDLE, CAT_ALARM))
+show('BADGE alarm', BADGE_ALARM)
+show('BADGE happy', BADGE_HAPPY)
 
 // ---------------- Иконки узлов 12x12 ----------------
 const ICON_MONITOR = [

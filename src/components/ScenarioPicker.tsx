@@ -3,24 +3,24 @@ import { SCENARIOS, flatten, type Scenario } from '../data/scenarios'
 
 interface ScenarioPickerProps {
   onStart: (scenario: Scenario) => void
+  onTheory: () => void
 }
 
 /** Пустое состояние: выбор сценария. */
-export function ScenarioPicker({ onStart }: ScenarioPickerProps) {
+export function ScenarioPicker({ onStart, onTheory }: ScenarioPickerProps) {
   return (
     <div className="picker">
       <div className="picker__hero">
         <Mascot mood="idle" size={148} className="picker__cat" />
         <div className="picker__intro">
-          <h1 className="picker__title px-text">Стенд СЗИ</h1>
+          <h1 className="picker__title px-text">Сценарии</h1>
           <p className="picker__lead">
-            Шесть интерактивных историй о том, как средства защиты информации ловят атаки:
-            вредоносная почта, компрометация АРМ, сетевой удар, работа IPS, DLP и брутфорс.
-            Выберите сценарий и идите по шагам.
+            Интерактивные истории о том, как средства защиты информации ловят атаки:
+            от вредоносной почты до брутфорса. Выберите сценарий и идите по шагам.
           </p>
-          <p className="picker__hint">
-            Управление: кнопки «Далее» и «Назад» или стрелки ←&nbsp;→ на клавиатуре.
-          </p>
+          <button type="button" className="btn btn--ghost" onClick={onTheory}>
+            ← Азбука защиты
+          </button>
         </div>
       </div>
 

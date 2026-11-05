@@ -334,6 +334,118 @@ export const ICON_PHONE: PixelMap = [
   '............',
 ]
 
+/** Сейф: хранилище привилегированных доступов (PAM). 12×12. */
+export const ICON_VAULT: PixelMap = [
+  '............',
+  '..oooooooo..',
+  '.offffffffo.',
+  '.offeeeeffo.',
+  '.offeekkffo.',
+  '.offeekkffo.',
+  '.offeeeeffo.',
+  '.offffffffo.',
+  '..oooooooo..',
+  '............',
+  '............',
+  '............',
+]
+
+/** Удостоверение: каталог учётных записей (IAM). 12×12. */
+export const ICON_IDCARD: PixelMap = [
+  '............',
+  'oooooooooooo',
+  'ofeeefwwwwfo',
+  'ofeeefwwwwfo',
+  'ofeeefwwwwfo',
+  'offffffffffo',
+  'ofwwwwwwwwfo',
+  'offffffffffo',
+  'oooooooooooo',
+  '............',
+  '............',
+  '............',
+]
+
+/** Волны трафика: сенсор NDR слушает сеть. 12×12. */
+export const ICON_WAVES: PixelMap = [
+  '............',
+  '............',
+  '.ee..ee..ee.',
+  '..........o.',
+  '.ww..ww..woo',
+  '..........o.',
+  '.ee..ee..ee.',
+  '............',
+  '............',
+  '............',
+  '............',
+  '............',
+]
+
+/** Кодовые скобки: WAF бережёт веб-приложения. 12×12. */
+export const ICON_CODE: PixelMap = [
+  '............',
+  '............',
+  '..o......o..',
+  '.o.o....o.o.',
+  '..oo....oo..',
+  '...o.ee.o...',
+  '..oo....oo..',
+  '.o.o....o.o.',
+  '..o......o..',
+  '............',
+  '............',
+  '............',
+]
+
+/** Горшок мёда: honeypot-ловушка. 12×12. */
+export const ICON_HONEYPOT: PixelMap = [
+  '...oooooo...',
+  '..ooffffoo..',
+  '.oooooooooo.',
+  '.offffffffo.',
+  '.offeeeeffo.',
+  '.offeeeeffo.',
+  '.offeeeeffo.',
+  '..offffffo..',
+  '...oooooo...',
+  '............',
+  '............',
+  '............',
+]
+
+/** Шестерёнка: оркестрация и автоматизация (SOAR). 12×12. */
+export const ICON_GEAR: PixelMap = [
+  '............',
+  '...oo..oo...',
+  '..oooooooo..',
+  '.ooffffffoo.',
+  'oofffeefffoo',
+  'oofffeefffoo',
+  '.ooffffffoo.',
+  '..oooooooo..',
+  '...oo..oo...',
+  '............',
+  '............',
+  '............',
+]
+
+/** Граф связей: корреляция событий (XDR). 12×12. */
+export const ICON_GRAPH: PixelMap = [
+  '............',
+  '....oooo....',
+  '...offffo...',
+  '...offffo...',
+  '....oooo....',
+  '...e....e...',
+  '..e......e..',
+  '.oooo..oooo.',
+  '.offo..offo.',
+  '.oooo..oooo.',
+  '............',
+  '............',
+]
+
 /** Палитра маркеров на треке, 12×8. */
 export const MARKER_PALETTE: Record<string, string> = {
   o: '#12152b',
@@ -377,6 +489,30 @@ export const FILE: PixelMap = [
   '.owddddddwo.',
   '.owwwwwwwwo.',
   '..oooooooo..',
+  '............',
+]
+
+/** Маркер «ключ» — украденный секрет доступа (PAM). 12×8. */
+export const KEYMARKER: PixelMap = [
+  '............',
+  '..kkk.......',
+  '.k...k......',
+  '.k...kkkkkk.',
+  '..kkk..k..k.',
+  '............',
+  '............',
+  '............',
+]
+
+/** Маркер «пропуск» — учётная запись сотрудника (IAM). 12×8. */
+export const CARD: PixelMap = [
+  '............',
+  '.kkkkkkkkkk.',
+  '.kwccwwwwwk.',
+  '.kwccwwdwwk.',
+  '.kwwwwwwwwk.',
+  '.kwddddwwwk.',
+  '.kkkkkkkkkk.',
   '............',
 ]
 

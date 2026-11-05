@@ -5,11 +5,16 @@ import { FinalCard } from './components/FinalCard'
 import { ScenarioPicker } from './components/ScenarioPicker'
 import { ScenePanel } from './components/ScenePanel'
 import { StageMap } from './components/StageMap'
+import { TheoryScreen } from './components/TheoryScreen'
 import { flatten, type Scenario } from './data/scenarios'
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion'
 import { useTypewriter } from './hooks/useTypewriter'
 
+/** Какой экран показывать вне прогона сценария. */
+type Screen = 'theory' | 'picker'
+
 export default function App() {
+  const [screen, setScreen] = useState<Screen>('theory')
   const [scenario, setScenario] = useState<Scenario | null>(null)
   const [index, setIndex] = useState(0)
   const reducedMotion = usePrefersReducedMotion()
@@ -18,6 +23,7 @@ export default function App() {
   const step = steps[index]
 
   const titleRef = useRef<HTMLHeadingElement | HTMLDivElement>(null)
+  const theoryRef = useRef<HTMLDivElement>(null)
 
   const start = useCallback((next: Scenario) => {
     setScenario(next)
@@ -31,6 +37,11 @@ export default function App() {
     setScenario(null)
     setIndex(0)
   }, [])
+
+  // Фокус на начало теормодуля при входе в него.
+  useEffect(() => {
+    if (!scenario && screen === 'theory') theoryRef.current?.focus()
+  }, [scenario, screen])
 
   // Фокус на заголовок при смене шага — скринридер озвучит новую сцену.
   useEffect(() => {
@@ -69,19 +80,13 @@ export default function App() {
         К содержимому
       </a>
 
-      <header className="app__header">
-        <div className="app__brand">
-          <Mascot mood="idle" size={44} className="app__logo" />
-          <div>
-            <p className="app__title px-text">Стенд СЗИ</p>
-            <p className="app__subtitle">демо работы средств защиты информации</p>
-          </div>
-        </div>
-      </header>
-
       <main id="main" className="app__main">
         {!scenario || !step ? (
-          <ScenarioPicker onStart={start} />
+          screen === 'theory' ? (
+            <TheoryScreen ref={theoryRef} onStart={() => setScreen('picker')} />
+          ) : (
+            <ScenarioPicker onStart={start} onTheory={() => setScreen('theory')} />
+          )
         ) : (
           <>
             <StageMap steps={steps} step={step} />
@@ -120,13 +125,6 @@ export default function App() {
           </>
         )}
       </main>
-
-      <footer className="app__footer">
-        <p>
-          Учебная демонстрация: события и вердикты концептуальные. Реплики Мяушифра задаются в
-          исходном коде — их id видны в интерфейсе под репликами.
-        </p>
-      </footer>
     </div>
   )
 }

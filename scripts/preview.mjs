@@ -342,6 +342,120 @@ show('ICON chart', ICON_CHART)
 show('ICON lock', ICON_LOCK)
 show('ICON phone', ICON_PHONE)
 
+// ---------------- Иконки СЗИ второй очереди 12x12 ----------------
+const ICON_VAULT = [
+  '............',
+  '..oooooooo..',
+  '.offffffffo.',
+  '.offeeeeffo.',
+  '.offeekkffo.',
+  '.offeekkffo.',
+  '.offeeeeffo.',
+  '.offffffffo.',
+  '..oooooooo..',
+  '............',
+  '............',
+  '............',
+]
+
+const ICON_IDCARD = [
+  '............',
+  'oooooooooooo',
+  'ofeeefwwwwfo',
+  'ofeeefwwwwfo',
+  'ofeeefwwwwfo',
+  'offffffffffo',
+  'ofwwwwwwwwfo',
+  'offffffffffo',
+  'oooooooooooo',
+  '............',
+  '............',
+  '............',
+]
+
+const ICON_WAVES = [
+  '............',
+  '............',
+  '.ee..ee..ee.',
+  '..........o.',
+  '.ww..ww..woo',
+  '..........o.',
+  '.ee..ee..ee.',
+  '............',
+  '............',
+  '............',
+  '............',
+  '............',
+]
+
+const ICON_CODE = [
+  '............',
+  '............',
+  '..o......o..',
+  '.o.o....o.o.',
+  '..oo....oo..',
+  '...o.ee.o...',
+  '..oo....oo..',
+  '.o.o....o.o.',
+  '..o......o..',
+  '............',
+  '............',
+  '............',
+]
+
+const ICON_HONEYPOT = [
+  '...oooooo...',
+  '..ooffffoo..',
+  '.oooooooooo.',
+  '.offffffffo.',
+  '.offeeeeffo.',
+  '.offeeeeffo.',
+  '.offeeeeffo.',
+  '..offffffo..',
+  '...oooooo...',
+  '............',
+  '............',
+  '............',
+]
+
+const ICON_GEAR = [
+  '............',
+  '...oo..oo...',
+  '..oooooooo..',
+  '.ooffffffoo.',
+  'oofffeefffoo',
+  'oofffeefffoo',
+  '.ooffffffoo.',
+  '..oooooooo..',
+  '...oo..oo...',
+  '............',
+  '............',
+  '............',
+]
+
+const ICON_GRAPH = [
+  '............',
+  '....oooo....',
+  '...offffo...',
+  '...offffo...',
+  '....oooo....',
+  '...e....e...',
+  '..e......e..',
+  '.oooo..oooo.',
+  '.offo..offo.',
+  '.oooo..oooo.',
+  '............',
+  '............',
+]
+
+show('ICON vault', ICON_VAULT)
+show('ICON idcard', ICON_IDCARD)
+show('ICON waves', ICON_WAVES)
+show('ICON code', ICON_CODE)
+show('ICON honeypot', ICON_HONEYPOT)
+show('ICON gear', ICON_GEAR)
+show('ICON graph', ICON_GRAPH)
+
 // ---------------- Маркеры на треке 12x8 ----------------
 const LETTER = [
   '..oooooooo..',
@@ -383,9 +497,35 @@ const MARKER_LOCK = [
   [4, 5, 'o'], [5, 5, 'k'], [6, 5, 'k'], [7, 5, 'o'],
 ]
 
+const KEYMARKER = [
+  '............',
+  '..kkk.......',
+  '.k...k......',
+  '.k...kkkkkk.',
+  '..kkk..k..k.',
+  '............',
+  '............',
+  '............',
+]
+
+const CARD = [
+  '............',
+  '.kkkkkkkkkk.',
+  '.kwccwwwwwk.',
+  '.kwccwwdwwk.',
+  '.kwwwwwwwwk.',
+  '.kwddddwwwk.',
+  '.kkkkkkkkkk.',
+  '............',
+]
+
 show('LETTER', LETTER)
 show('LETTER locked', applyPatch(LETTER, MARKER_LOCK))
 show('BUG', BUG)
 show('BUG locked', applyPatch(BUG, MARKER_LOCK))
 show('FILE', FILE)
 show('FILE locked', applyPatch(FILE, MARKER_LOCK))
+show('KEYMARKER', KEYMARKER)
+show('KEYMARKER locked', applyPatch(KEYMARKER, MARKER_LOCK))
+show('CARD', CARD)
+show('CARD locked', applyPatch(CARD, MARKER_LOCK))

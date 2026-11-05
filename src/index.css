@@ -267,50 +267,8 @@ button {
   min-height: 100vh;
 }
 
-.app__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 10px 14px;
-  margin-bottom: 20px;
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-  background: rgba(23, 27, 51, 0.7);
-}
-
-.app__brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  min-width: 0;
-}
-
-.app__logo {
-  flex: none;
-}
-
-.app__title {
-  color: var(--ink);
-  margin: 0;
-}
-
-.app__subtitle {
-  color: var(--ink-dim);
-  font-size: 13px;
-  font-family: var(--font-mono);
-}
-
 .app__main {
   flex: 1;
-}
-
-.app__footer {
-  margin-top: 34px;
-  padding-top: 14px;
-  border-top: 2px solid var(--line);
-  color: var(--ink-dim);
-  font-size: 13px;
 }
 
 /* ------------------------------------------------------- выбор сценария */
@@ -343,12 +301,6 @@ button {
   font-size: 17px;
   max-width: 52ch;
   margin-bottom: 10px;
-}
-
-.picker__hint {
-  color: var(--ink-dim);
-  font-size: 14px;
-  font-family: var(--font-mono);
 }
 
 .picker__cards {
@@ -411,6 +363,112 @@ button {
 
 .scenariocard__outcome strong {
   color: var(--ink);
+}
+
+/* --------------------------------------------------------- теоретический модуль */
+
+.theory {
+  outline: none;
+}
+
+.theory__head {
+  padding: 32px 28px;
+  margin-bottom: 24px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(120deg, rgba(141, 142, 240, 0.08), transparent 55%),
+    var(--bg-raised);
+}
+
+.theory__eyebrow {
+  font-size: 10px;
+  color: var(--ink-dim);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.theory__title {
+  font-size: 26px;
+  color: var(--ink);
+  text-shadow: 3px 3px 0 var(--cyan-deep);
+  margin-bottom: 16px;
+}
+
+.theory__lead {
+  font-size: 16.5px;
+  max-width: 56ch;
+  color: var(--ink-dim);
+  margin-bottom: 20px;
+}
+
+.theory__group {
+  margin-bottom: 24px;
+}
+
+.theory__group-title {
+  font-size: 14px;
+  color: var(--gold);
+  margin: 0 0 14px;
+  padding: 10px 0 8px;
+  border-bottom: 2px solid var(--line);
+}
+
+.theory__cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 14px;
+}
+
+.term {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  padding: 16px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-raised);
+}
+
+.term__icon {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: var(--bg-inset);
+  border: 2px solid var(--line);
+  padding: 4px;
+  border-radius: var(--radius);
+  image-rendering: pixelated;
+}
+
+.term__name {
+  font-size: 17px;
+  margin-bottom: 3px;
+}
+
+.term__full {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--cyan);
+  margin-bottom: 8px;
+}
+
+.term__text {
+  font-size: 14.5px;
+  color: var(--ink-dim);
+}
+
+.theory__foot {
+  display: flex;
+  justify-content: center;
+  padding: 14px 0 4px;
 }
 
 /* ------------------------------------------------------------- конвейер */
@@ -924,12 +982,6 @@ button {
   flex-wrap: wrap;
 }
 
-.controls__hint {
-  color: var(--ink-dim);
-  font-size: 13px;
-  font-family: var(--font-mono);
-}
-
 /* ---------------------------------------------------------------- маскот */
 /* PNG-спрайты (src/assets/mascot/) из пикселизации исходной картинки */
 
@@ -1022,8 +1074,10 @@ button {
     padding: 12px 12px 30px;
   }
 
-  .app__header {
-    flex-wrap: wrap;
+  /* тап-таргеты: все кнопки не меньше пальца */
+  .btn {
+    min-height: 46px;
+    padding: 10px 16px;
   }
 
   .picker__hero {
@@ -1034,6 +1088,47 @@ button {
 
   .picker__lead {
     margin-inline: auto;
+  }
+
+  /* теоретический модуль: компактнее, во всю ширину */
+  .theory__head {
+    padding: 22px 16px;
+  }
+
+  .theory__title {
+    font-size: 21px;
+  }
+
+  .theory__lead {
+    font-size: 15px;
+  }
+
+  .theory__cards {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .term {
+    grid-template-columns: 46px minmax(0, 1fr);
+    padding: 13px 14px;
+  }
+
+  .finalcard {
+    padding: 18px 14px;
+  }
+
+  .finalcard__banner {
+    font-size: 19px;
+  }
+
+  /* плотный монолог спикера читается свободнее на узком экране */
+  .szicard__narration {
+    line-height: 1.7;
+  }
+
+  /* карточка сцены и комментарий кота не сливаются */
+  .run__mascot {
+    margin-top: 16px;
   }
 
   /* конвейер вертикальный */
@@ -1103,10 +1198,6 @@ button {
   .controls__nav .btn,
   .controls__meta .btn {
     flex: 1;
-  }
-
-  .controls__hint {
-    text-align: center;
   }
 }
 

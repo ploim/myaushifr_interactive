@@ -10,7 +10,7 @@ interface ControlsProps {
 
 /** Нижняя панель управления прогоном. */
 export function Controls({ step, onBack, onNext, onRestart, onExit }: ControlsProps) {
-  const { index, total, scene } = step
+  const { index, total } = step
   const atStart = index === 0
   const atEnd = index === total - 1
   const nextLabel = index === total - 2 ? 'К итогу' : 'Далее'
@@ -27,10 +27,6 @@ export function Controls({ step, onBack, onNext, onRestart, onExit }: ControlsPr
           </button>
         )}
       </div>
-
-      <p className="controls__hint" aria-hidden="true">
-        {scene.finale ? 'Забег завершён' : 'Подсказка: работают стрелки ← →'}
-      </p>
 
       <div className="controls__meta">
         <button type="button" className="btn btn--ghost" onClick={onRestart}>

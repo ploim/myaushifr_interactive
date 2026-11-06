@@ -52,6 +52,7 @@ jobs:
           source: "dist/*"
           target: "/var/www/politech-profile-interactive"
           rm: false
+          strip_components: 1
 
       - name: Reload nginx
         uses: appleboy/ssh-action@v1.2.0

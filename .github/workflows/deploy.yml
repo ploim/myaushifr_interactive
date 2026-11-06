@@ -1,4 +1,4 @@
-name: Deploy to politech-profile.ru/interactive
+name: Deploy to polytech-profile.ru/interactive
 
 on:
   push:
@@ -39,7 +39,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            find /var/www/politech-profile-interactive -mindepth 1 -delete
+            find /var/www/polytech-profile-interactive -mindepth 1 -delete
 
       - name: Upload dist to server
         uses: appleboy/scp-action@v0.1.7
@@ -50,7 +50,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
 
           source: "dist/*"
-          target: "/var/www/politech-profile-interactive"
+          target: "/var/www/polytech-profile-interactive"
           rm: false
           strip_components: 1
 
